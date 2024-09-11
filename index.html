@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sketch Innovate - Hand-Drawn Web Experience</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Permanent+Marker&display=swap');
+
+        body {
+            font-family: 'Caveat', cursive;
+            background-color: #f0f0f0;
+            overflow-x: hidden;
+        }
+
+        .hand-drawn {
+            filter: url(#rough);
+        }
+
+        .sketch-border {
+            position: relative;
+        }
+
+        .sketch-border::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border: 3px solid #000;
+            border-radius: 20px;
+            transform: rotate(-1deg);
+            z-index: -1;
+        }
+
+        .pencil-underline {
+            position: relative;
+            display: inline-block;
+        }
+
+        .pencil-underline::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            width: 100%;
+            height: 10px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10'%3E%3Cpath d='M0,5 Q25,0 50,5 T100,5' fill='none' stroke='%23000' stroke-width='2'/%3E%3C/svg%3E");
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+        }
+
+        .sketch-bg {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.05'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3Cpath d='M6 5V0H5v5H0v1h5v94h1V6h94V5H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .parallax-section {
+            perspective: 1000px;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .parallax-layer {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+        .layer-1 { transform: translateZ(-300px) scale(1.3); }
+        .layer-2 { transform: translateZ(-200px) scale(1.2); }
+        .layer-3 { transform: translateZ(-100px) scale(1.1); }
+        .layer-4 { transform: translateZ(0) scale(1); }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .nav-link {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #000;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            transform: translateX(0);
+        }
+
+        .scribble {
+            position: relative;
+        }
+
+        .scribble::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M10,50 Q30,40 50,50 T90,50' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-size: 10px 10px;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .highlight-text {
+            position: relative;
+            display: inline-block;
+        }
+
+        .highlight-text::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            right: -10px;
+            top: 0;
+            bottom: 0;
+            background-color: #ffd700;
+            transform: rotate(-2deg) skew(-2deg);
+            z-index: -1;
+        }
+    </style>
+</head>
+<body class="sketch-bg">
+    <svg width="0" height="0" class="hidden">
+        <filter id="rough">
+            <feTurbulence type="turbulence" baseFrequency="0.05" numOctaves="2" result="noise" seed="2" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" />
+        </filter>
+    </svg>
+
+    <header class="fixed w-full z-50 bg-white bg-opacity-90 backdrop-filter backdrop-blur-lg">
+        <nav class="container mx-auto px-6 py-3">
+            <div class="flex justify-between items-center">
+                <a href="#" class="text-3xl font-bold hand-drawn">SketchInnovate</a>
+                <ul class="hidden md:flex space-x-8">
+                    <li><a href="#home" class="nav-link text-xl">Home</a></li>
+                    <li><a href="#about" class="nav-link text-xl">About</a></li>
+                    <li><a href="#portfolio" class="nav-link text-xl">Portfolio</a></li>
+                    <li><a href="#contact" class="nav-link text-xl">Contact</a></li>
+                </ul>
+                <button class="md:hidden">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="parallax-section">
+           
+            <div class="parallax-layer layer-4 flex items-center justify-center">
+                <div class="text-center">
+                    <h1 class="text-6xl md:text-8xl font-bold mb-6 hand-drawn">
+                        <span class="highlight-text">Hand-Drawn</span><br>
+                        <span class="highlight-text">Web Magic</span>
+                    </h1>
+                    <p class="text-2xl md:text-3xl mb-8 hand-drawn">Bringing sketches to life in the digital realm</p>
+                    <a href="#portfolio" class="sketch-border bg-black text-white px-8 py-4 text-xl inline-block transition-transform hover:scale-105">
+                        Explore Our Work
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl md:text-5xl font-bold mb-12 text-center hand-drawn">
+                    <span class="pencil-underline">About Us</span>
+                </h2>
+                <div class="flex flex-wrap -mx-4">
+                    <div class="w-full md:w-1/2 px-4 mb-8 md:mb-0">
+                        <div class="sketch-border p-6 bg-gray-100 h-full">
+                            <h3 class="text-2xl font-bold mb-4 hand-drawn">Our Story</h3>
+                            <p class="text-lg mb-4">We're a passionate team of artists and developers who believe in the power of hand-drawn elements to create unique digital experiences.</p>
+                            <p class="text-lg">Our journey began with a simple sketch pad and a dream to revolutionize web design. Today, we're proud to bring that dream to life in every project we undertake.</p>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/2 px-4">
+                        <div class="sketch-border p-6 bg-gray-100 h-full">
+                            <h3 class="text-2xl font-bold mb-4 hand-drawn">Our Approach</h3>
+                            <ul class="text-lg list-disc list-inside">
+                                <li class="mb-2">Blend traditional artistry with cutting-edge technology</li>
+                                <li class="mb-2">Focus on unique, personalized designs for each client</li>
+                                <li class="mb-2">Emphasize user experience and intuitive navigation</li>
+                                <li>Constantly innovate and push the boundaries of web design</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="portfolio" class="py-20 bg-gray-100">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl md:text-5xl font-bold mb-12 text-center hand-drawn">
+                    <span class="pencil-underline">Our Portfolio</span>
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="sketch-border bg-white p-6 transition-transform hover:scale-105">
+                        <img src="OIP (10).jpeg" alt="Project 1" class="w-full h-48 object-cover mb-4">
+                        <h3 class="text-2xl font-bold mb-2 hand-drawn">Whimsical E-commerce</h3>
+                        <p class="text-lg mb-4">A playful online store with hand-drawn product illustrations and animated checkout process.</p>
+                        <a href="#" class="text-black font-bold hover:underline">View Project</a>
+                    </div>
+                    <div class="sketch-border bg-white p-6 transition-transform hover:scale-105">
+                        <img src="storytelling.png" alt="Project 2" class="w-full h-48 object-cover mb-4">
+                        <h3 class="text-2xl font-bold mb-2 hand-drawn">Storytelling Blog</h3>
+                        <p class="text-lg mb-4">A narrative-driven blog with interactive hand-drawn elements that enhance the reading experience.</p>
+                        <a href="#" class="text-black font-bold hover:underline">View Project</a>
+                    </div>
+                    <div class="sketch-border bg-white p-6 transition-transform hover:scale-105">
+                        <img src="pierrick-calvez-artist-portfolio-website.jpg" alt="Project 3" class="w-full h-48 object-cover mb-4">
+                        <h3 class="text-2xl font-bold mb-2 hand-drawn">Artistic Portfolio</h3>
+                        <p class="text-lg mb-4">A dynamic portfolio showcasing an artist's work through an immersive hand-drawn interface.</p>
+                        <a href="#" class="text-black font-bold hover:underline">View Project</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="process" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl md:text-5xl font-bold mb-12 text-center hand-drawn">
+                    <span class="pencil-underline">Our Process</span>
+                </h2>
+                <div class="flex flex-wrap -mx-4">
+                    <div class="w-full md:w-1/3 px-4 mb-8">
+                        <div class="sketch-border p-6 bg-gray-100 h-full text-center">
+                            <div class="text-5xl mb-4">✏️</div>
+                            <h3 class="text-2xl font-bold mb-4 hand-drawn">1. Sketch</h3>
+                            <p class="text-lg">We start with hand-drawn sketches to capture the essence of your vision.</p>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/3 px-4 mb-8">
+                        <div class="sketch-border p-6 bg-gray-100 h-full text-center">
+                            <div class="text-5xl mb-4">💻</div>
+                            <h3 class="text-2xl font-bold mb-4 hand-drawn">2. Digitize</h3>
+                            <p class="text-lg">We transform our sketches into digital assets, preserving their unique character.</p>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/3 px-4 mb-8">
+                        <div class="sketch-border p-6 bg-gray-100 h-full text-center">
+                            <div class="text-5xl mb-4">🚀</div>
+                            <h3 class="text-2xl font-bold mb-4 hand-drawn">3. Develop</h3>
+                            <p class="text-lg">We bring the design to life with cutting-edge web technologies and animations.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="testimonials" class="py-20 bg-gray-100">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl md:text-5xl font-bold mb-12 text-center hand-drawn">
+                    <span class="pencil-underline">What Our Clients Say</span>
+                </h2>
+                <div class="flex flex-wrap -mx-4">
+                    <div class="w-full md:w-1/2 px-4 mb-8">
+                        <div class="sketch-border p-6 bg-white h-full">
+                            <p class="text-lg mb-4">"SketchInnovate transformed our online presence with their unique hand-drawn approach. Our website now truly reflects our brand's personality!"</p>
+                            <p class="font-bold hand-drawn">- Sarah Johnson, Fashion Boutique Owner</p>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/2 px-4 mb-8">
+                        <div class="sketch-border p-6 bg-white h-full">
+                            <p class="text-lg mb-4">"The team's creativity and attention to detail are unmatched. They turned our ideas into a visually stunning and highly functional website."</p>
+                            <p class="font-bold hand-drawn">- Mike Chen, Tech Startup Founder</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl md:text-5xl font-bold mb-12 text-center hand-drawn">
+                    <span class="pencil-underline">Get in Touch</span>
+                </h2>
+                <div class="max-w-lg mx-auto">
+                    <form class="sketch-border p-6 bg-gray-100">
+                        <div class="mb-4">
+                            <label for="name" class="block text-lg mb-2 hand-drawn">Name</label>
+                            <input type="text" id="name" name="name" class="w-full p-2 border border-gray-300 rounded" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="email" class="block text-lg mb-2 hand-drawn">Email</label>
+                            <input type="email" id="email" name="email" class="w-full p-2 border border-gray-300 rounded" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="message" class="block text-lg mb-2 hand-drawn">Message</label>
+                            <textarea id="message" name="message" rows="4" class="w-full p-2 border border-gray-300 rounded" required></textarea>
+                        </div>
+                        <button type="submit" class="sketch-border bg-black text-white px-6 py-3 text-lg inline-block transition-transform hover:scale-105">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-wrap justify-between items-center">
+                <div class="w-full md:w-1/3 mb-6 md:mb-0">
+                    <h3 class="text-2xl font-bold mb-4 hand-drawn">SketchInnovate</h3>
+                    <p class="text-gray-400">Bringing creativity to the digital world, one sketch at a time.</p>
+                </div>
+                <div class="w-full md:w-1/3 mb-6 md:mb-0">
+                    <h4 class="text-xl font-bold mb-4 hand-drawn">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="hover:text-gray-300">Home</a></li>
+                        <li><a href="#about" class="hover:text-gray-300">About</a></li>
+                        <li><a href="#portfolio" class="hover:text-gray-300">Portfolio</a></li>
+                        <li><a href="#contact" class="hover:text-gray-300">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="w-full md:w-1/3">
+                    <h4 class="text-xl font-bold mb-4 hand-drawn">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-2xl hover:text-gray-300">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="#" class="text-2xl hover:text-gray-300">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-2xl hover:text-gray-300">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-2xl hover:text-gray-300">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 text-center text-gray-400">
+                <p>&copy; 2024 SketchInnovate. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Parallax effect for hero section
+        gsap.to(".layer-1", {
+            yPercent: 50,
+            ease: "none",
+            scrollTrigger: {
+                trigger: ".parallax-section",
+                scrub: true
+            },
+        });
+
+        gsap.to(".layer-2", {
+            yPercent: 30,
+            ease: "none",
+            scrollTrigger: {
+                trigger: ".parallax-section",
+                scrub: true
+            },
+        });
+
+        gsap.to(".layer-3", {
+            yPercent: 20,
+            ease: "none",
+            scrollTrigger: {
+                trigger: ".parallax-section",
+                scrub: true
+            },
+        });
+
+        // Animate sections on scroll
+        gsap.utils.toArray("section").forEach((section, i) => {
+            ScrollTrigger.create({
+                trigger: section,
+                start: "top center",
+                toggleClass: "active",
+                once: true
+            });
+
+            gsap.from(section.querySelectorAll("h2, h3, p, .sketch-border"), {
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                stagger: 0.2,
+                scrollTrigger: {
+                    trigger: section,
+                    start: "top 80%",
+                    end: "bottom 20%",
+                    toggleActions: "play none none reverse"
+                }
+            });
+        });
+
+        // Floating animation for hero content
+        gsap.to(".layer-4 > div", {
+            y: 20,
+            duration: 2,
+            repeat: -1,
+            yoyo: true,
+            ease: "power1.inOut"
+        });
+
+        // Mobile menu toggle
+        const mobileMenuButton = document.querySelector("button.md\\:hidden");
+        const mobileMenu = document.querySelector("ul.hidden");
+
+        mobileMenuButton.addEventListener("click", () => {
+            mobileMenu.classList.toggle("hidden");
+            mobileMenu.classList.toggle("flex");
+            mobileMenu.classList.toggle("flex-col");
+            mobileMenu.classList.toggle("absolute");
+            mobileMenu.classList.toggle("top-full");
+            mobileMenu.classList.toggle("left-0");
+            mobileMenu.classList.toggle("right-0");
+            mobileMenu.classList.toggle("bg-white");
+            mobileMenu.classList.toggle("shadow-md");
+            mobileMenu.classList.toggle("py-4");
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
